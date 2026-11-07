@@ -1,0 +1,16 @@
+# Defence in depth for the fallback layout where the project root is the
+# document root. In production the document root should be backend/public.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(database|docs)/ - [F,L]
+</IfModule>
+
+<FilesMatch "\.(sql|md|log|ini|bak)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
